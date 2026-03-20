@@ -1,0 +1,15 @@
+C:\Users\Ramesh\source\repos\StarFix\StarFix\bin\Debug\net10.0\StarFix.exe
+C:\Users\Ramesh\source\repos\StarFix\StarFix\bin\Debug\net10.0\StarFix.deps.json
+C:\Users\Ramesh\source\repos\StarFix\StarFix\bin\Debug\net10.0\StarFix.runtimeconfig.json
+C:\Users\Ramesh\source\repos\StarFix\StarFix\bin\Debug\net10.0\StarFix.dll
+C:\Users\Ramesh\source\repos\StarFix\StarFix\bin\Debug\net10.0\StarFix.pdb
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.AssemblyInfoInputs.cache
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.AssemblyInfo.cs
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.csproj.CoreCompileInputs.cache
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.sourcelink.json
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.dll
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\refint\StarFix.dll
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.pdb
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\StarFix.genruntimeconfig.cache
+C:\Users\Ramesh\source\repos\StarFix\StarFix\obj\Debug\net10.0\ref\StarFix.dll
