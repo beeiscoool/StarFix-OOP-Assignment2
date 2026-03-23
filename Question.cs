@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace StarFix
+namespace StarFixGUI
 {
     internal class Question
     {
@@ -37,16 +36,6 @@ namespace StarFix
             this.questionText = questionText;
             this.options = options;
             this.correctOptionIndex = correctOptionIndex;
-        }
-
-        public void Display()
-        {
-            Console.WriteLine("\nQ: " + questionText);
-
-            for (int i = 0; i < options.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {options[i]}");
-            }
         }
 
         public bool CheckAnswer(int choice)

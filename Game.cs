@@ -1,16 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using StarFixGUI;
 
-namespace StarFix
+namespace StarFixGUI
 {
     internal class Game
     {
-        // Private fields
         private Player player;
         private List<Question> questions;
+        private int currentQuestionIndex;
         private Random random;
 
-        
         public Player Player
         {
             get { return player; }
@@ -21,22 +21,24 @@ namespace StarFix
             get { return questions; }
         }
 
-        // Constructor
-        public Game()
+        public int CurrentQuestionIndex
         {
-            questions = new List<Question>();
-            random = new Random();
+            get { return currentQuestionIndex; }
         }
 
-        public void StartGame()
+        public Game(string playerName)
         {
-            Console.Clear();
-            Console.WriteLine("=== STARFIX SPACE QUIZ ===");
-            Console.Write("Enter Pilot Name: ");
+            player = new Player(playerName, 3);
+            questions = new List<Question>();
+            random = new Random();
+            currentQuestionIndex = 0;
 
-            string name = Console.ReadLine() ?? "Pilot";
-            player = new Player(name, 3);
+            LoadQuestions();
+            ShuffleQuestions();
+        }
 
+        private void LoadQuestions()
+        {
             questions = new List<Question>
             {
                 new Question("Which planet is known as the Red Planet?",
@@ -51,8 +53,10 @@ namespace StarFix
                 new Question("Which planet is the largest in our solar system?",
                     new List<string> { "Saturn", "Jupiter", "Neptune" }, 1)
             };
+        }
 
-            // Shuffle questions
+        private void ShuffleQuestions()
+        {
             for (int i = 0; i < questions.Count; i++)
             {
                 int j = random.Next(i, questions.Count);
@@ -60,60 +64,47 @@ namespace StarFix
             }
         }
 
-        public void Run()
+        public Question GetCurrentQuestion()
         {
-            StartGame();
+            if (currentQuestionIndex < questions.Count)
+                return questions[currentQuestionIndex];
 
-            foreach (var q in questions)
-            {
-                if (!player.IsAlive())
-                    break;
-
-                q.Display();
-
-                Console.Write($"\n{player.Name}, enter choice (1-{q.Options.Count}): ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
-                {
-                    if (q.CheckAnswer(choice))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Correct! System stabilized.");
-                        Console.ResetColor();
-
-                        player.AddScore(10);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Wrong! System failure detected.");
-                        Console.ResetColor();
-
-                        player.LoseLife();
-                        Console.WriteLine($"Lives left: {player.Lives}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input!");
-                }
-            }
-
-            EndGame();
+            return null;
         }
 
-        public void EndGame()
+        public bool SubmitAnswer(int choice)
         {
-            Console.WriteLine("\n=== MISSION REPORT ===");
+            Question currentQuestion = GetCurrentQuestion();
+            if (currentQuestion == null)
+                return false;
 
-            if (player.IsAlive())
-                Console.WriteLine("Mission successful. All systems stabilized.");
+            bool isCorrect = currentQuestion.CheckAnswer(choice);
+
+            if (isCorrect)
+                player.AddScore(10);
             else
-                Console.WriteLine("Mission failed. Critical system loss.");
+                player.LoseLife();
 
-            Console.WriteLine($"Final Score: {player.Score}");
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            currentQuestionIndex++;
+            return isCorrect;
+        }
+
+        public bool HasMoreQuestions()
+        {
+            return currentQuestionIndex < questions.Count;
+        }
+
+        public bool IsGameOver()
+        {
+            return !player.IsAlive() || currentQuestionIndex >= questions.Count;
+        }
+
+        public string GetFinalMessage()
+        {
+            if (player.IsAlive())
+                return $"Mission successful. Final Score: {player.Score}";
+            else
+                return $"Mission failed. Final Score: {player.Score}";
         }
     }
 }

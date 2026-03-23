@@ -1,13 +1,15 @@
 using System;
+using System.Windows.Forms;
 
-namespace StarFix
+namespace StarFixGUI
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        static void Main()
         {
-            Game game = new Game();
-            game.Run();
+            ApplicationConfiguration.Initialize();
+            Application.Run(new Form1());
         }
     }
 }

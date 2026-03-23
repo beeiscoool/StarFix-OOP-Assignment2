@@ -1,6 +1,4 @@
-using System;
-
-namespace StarFix
+﻿namespace StarFixGUI
 {
     internal class Player
     {
@@ -11,19 +9,31 @@ namespace StarFix
         public string Name
         {
             get { return name; }
-            set { name = value; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                    name = value;
+            }
         }
 
         public int Lives
         {
             get { return lives; }
-            set { lives = value; }
+            set
+            {
+                if (value >= 0)
+                    lives = value;
+            }
         }
 
         public int Score
         {
             get { return score; }
-            set { score = value; }
+            set
+            {
+                if (value >= 0)
+                    score = value;
+            }
         }
 
         public Player(string name, int lives)
