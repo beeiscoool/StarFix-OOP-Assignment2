@@ -5,10 +5,23 @@ namespace StarFix
 {
     internal class Game
     {
+        // Private fields
         private Player player;
         private List<Question> questions;
         private Random random;
 
+        
+        public Player Player
+        {
+            get { return player; }
+        }
+
+        public List<Question> Questions
+        {
+            get { return questions; }
+        }
+
+        // Constructor
         public Game()
         {
             questions = new List<Question>();
