@@ -35,14 +35,15 @@
             lblLives = new Label();
             lblTimer = new Label();
             lblQuestion = new Label();
-            btnOption1 = new Button();
-            btnOption2 = new Button();
-            btnOption3 = new Button();
-            lblResult = new Label();
             txtName = new TextBox();
             btnStart = new Button();
             gameTimer = new System.Windows.Forms.Timer(components);
             lblEnterName = new Label();
+            lblChoices = new Label();
+            txtAnswer = new TextBox();
+            label1 = new Label();
+            btnSubmit = new Button();
+            lblLevel = new Label();
             SuspendLayout();
             // 
             // lblTitle
@@ -64,7 +65,7 @@
             lblPlayer.BackColor = Color.Transparent;
             lblPlayer.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPlayer.ForeColor = Color.White;
-            lblPlayer.Location = new Point(333, 133);
+            lblPlayer.Location = new Point(483, 345);
             lblPlayer.Margin = new Padding(4, 0, 4, 0);
             lblPlayer.Name = "lblPlayer";
             lblPlayer.Size = new Size(106, 29);
@@ -77,7 +78,7 @@
             lblScore.BackColor = Color.Transparent;
             lblScore.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblScore.ForeColor = Color.White;
-            lblScore.Location = new Point(333, 190);
+            lblScore.Location = new Point(483, 445);
             lblScore.Margin = new Padding(4, 0, 4, 0);
             lblScore.Name = "lblScore";
             lblScore.Size = new Size(106, 29);
@@ -90,7 +91,7 @@
             lblLives.BackColor = Color.Transparent;
             lblLives.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblLives.ForeColor = Color.White;
-            lblLives.Location = new Point(333, 260);
+            lblLives.Location = new Point(483, 389);
             lblLives.Margin = new Padding(4, 0, 4, 0);
             lblLives.Name = "lblLives";
             lblLives.Size = new Size(101, 29);
@@ -113,61 +114,12 @@
             lblQuestion.BackColor = Color.Transparent;
             lblQuestion.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblQuestion.ForeColor = Color.Yellow;
-            lblQuestion.Location = new Point(148, 326);
+            lblQuestion.Location = new Point(13, 147);
             lblQuestion.Margin = new Padding(4, 0, 4, 0);
             lblQuestion.Name = "lblQuestion";
             lblQuestion.Size = new Size(620, 80);
             lblQuestion.TabIndex = 5;
             lblQuestion.Text = "Press Start to begin";
-            // 
-            // btnOption1
-            // 
-            btnOption1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnOption1.Location = new Point(262, 461);
-            btnOption1.Margin = new Padding(4, 3, 4, 3);
-            btnOption1.Name = "btnOption1";
-            btnOption1.Size = new Size(168, 39);
-            btnOption1.TabIndex = 6;
-            btnOption1.Text = "Option 1";
-            btnOption1.UseVisualStyleBackColor = true;
-            btnOption1.Click += btnOption1_Click;
-            // 
-            // btnOption2
-            // 
-            btnOption2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnOption2.Location = new Point(572, 461);
-            btnOption2.Margin = new Padding(4, 3, 4, 3);
-            btnOption2.Name = "btnOption2";
-            btnOption2.Size = new Size(168, 39);
-            btnOption2.TabIndex = 7;
-            btnOption2.Text = "Option 2";
-            btnOption2.UseVisualStyleBackColor = true;
-            btnOption2.Click += btnOption2_Click;
-            // 
-            // btnOption3
-            // 
-            btnOption3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnOption3.Location = new Point(861, 461);
-            btnOption3.Margin = new Padding(4, 3, 4, 3);
-            btnOption3.Name = "btnOption3";
-            btnOption3.Size = new Size(168, 39);
-            btnOption3.TabIndex = 8;
-            btnOption3.Text = "Option 3";
-            btnOption3.UseVisualStyleBackColor = true;
-            btnOption3.Click += btnOption3_Click;
-            // 
-            // lblResult
-            // 
-            lblResult.AutoSize = true;
-            lblResult.BackColor = Color.Transparent;
-            lblResult.Font = new Font("Showcard Gothic", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblResult.ForeColor = Color.Red;
-            lblResult.Location = new Point(632, 537);
-            lblResult.Margin = new Padding(4, 0, 4, 0);
-            lblResult.Name = "lblResult";
-            lblResult.Size = new Size(56, 50);
-            lblResult.TabIndex = 9;
-            lblResult.Text = "\"\"";
             // 
             // txtName
             // 
@@ -179,14 +131,15 @@
             // 
             // btnStart
             // 
+            btnStart.BackColor = Color.Yellow;
             btnStart.Font = new Font("Arial", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnStart.Location = new Point(776, 326);
+            btnStart.Location = new Point(857, 62);
             btnStart.Margin = new Padding(4, 3, 4, 3);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(222, 60);
             btnStart.TabIndex = 11;
             btnStart.Text = "START";
-            btnStart.UseVisualStyleBackColor = true;
+            btnStart.UseVisualStyleBackColor = false;
             btnStart.Click += btnStart_Click;
             // 
             // lblEnterName
@@ -201,6 +154,52 @@
             lblEnterName.TabIndex = 12;
             lblEnterName.Text = "Enter your name :";
             // 
+            // lblChoices
+            // 
+            lblChoices.AutoSize = true;
+            lblChoices.Location = new Point(13, 262);
+            lblChoices.Name = "lblChoices";
+            lblChoices.Size = new Size(135, 29);
+            lblChoices.TabIndex = 13;
+            lblChoices.Text = "CHOICES :";
+            // 
+            // txtAnswer
+            // 
+            txtAnswer.Location = new Point(138, 419);
+            txtAnswer.Name = "txtAnswer";
+            txtAnswer.Size = new Size(150, 35);
+            txtAnswer.TabIndex = 14;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(13, 425);
+            label1.Name = "label1";
+            label1.Size = new Size(106, 29);
+            label1.TabIndex = 15;
+            label1.Text = "Answer:";
+            // 
+            // btnSubmit
+            // 
+            btnSubmit.BackColor = Color.Yellow;
+            btnSubmit.Location = new Point(13, 502);
+            btnSubmit.Name = "btnSubmit";
+            btnSubmit.Size = new Size(169, 63);
+            btnSubmit.TabIndex = 16;
+            btnSubmit.Text = "SUBMIT";
+            btnSubmit.UseVisualStyleBackColor = false;
+            btnSubmit.Click += btnSubmit_Click;
+            // 
+            // lblLevel
+            // 
+            lblLevel.AutoSize = true;
+            lblLevel.BackColor = Color.Red;
+            lblLevel.Location = new Point(101, 19);
+            lblLevel.Name = "lblLevel";
+            lblLevel.Size = new Size(66, 29);
+            lblLevel.TabIndex = 17;
+            lblLevel.Text = "level";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(15F, 29F);
@@ -208,13 +207,14 @@
             BackgroundImage = Properties.Resources.oop_ass_2;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1683, 724);
+            Controls.Add(lblLevel);
+            Controls.Add(btnSubmit);
+            Controls.Add(label1);
+            Controls.Add(txtAnswer);
+            Controls.Add(lblChoices);
             Controls.Add(lblEnterName);
             Controls.Add(btnStart);
             Controls.Add(txtName);
-            Controls.Add(lblResult);
-            Controls.Add(btnOption3);
-            Controls.Add(btnOption2);
-            Controls.Add(btnOption1);
             Controls.Add(lblQuestion);
             Controls.Add(lblTimer);
             Controls.Add(lblLives);
@@ -238,13 +238,14 @@
         private Label lblLives;
         private Label lblTimer;
         private Label lblQuestion;
-        private Button btnOption1;
-        private Button btnOption2;
-        private Button btnOption3;
-        private Label lblResult;
         private TextBox txtName;
         private Button btnStart;
         private System.Windows.Forms.Timer gameTimer;
         private Label lblEnterName;
+        private Label lblChoices;
+        private TextBox txtAnswer;
+        private Label label1;
+        private Button btnSubmit;
+        private Label lblLevel;
     }
 }

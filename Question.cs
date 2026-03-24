@@ -2,45 +2,37 @@
 
 namespace StarFixGUI
 {
-    internal class Question
+    public class Question
     {
         private string questionText;
         private List<string> options;
-        private int correctOptionIndex;
+        private int correctAnswer;
 
         public string QuestionText
         {
             get { return questionText; }
-            set { questionText = value; }
         }
 
         public List<string> Options
         {
             get { return options; }
-            set { options = value; }
         }
 
-        public int CorrectOptionIndex
+        public int CorrectAnswer
         {
-            get { return correctOptionIndex; }
-            set { correctOptionIndex = value; }
+            get { return correctAnswer; }
         }
 
-        public Question()
-        {
-            options = new List<string>();
-        }
-
-        public Question(string questionText, List<string> options, int correctOptionIndex)
+        public Question(string questionText, List<string> options, int correctAnswer)
         {
             this.questionText = questionText;
             this.options = options;
-            this.correctOptionIndex = correctOptionIndex;
+            this.correctAnswer = correctAnswer;
         }
 
-        public bool CheckAnswer(int choice)
+        public bool IsCorrect(int userAnswer)
         {
-            return (choice - 1) == correctOptionIndex;
+            return userAnswer == correctAnswer;
         }
     }
 }

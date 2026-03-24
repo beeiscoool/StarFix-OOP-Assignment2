@@ -6,96 +6,147 @@ namespace StarFixGUI
     public partial class Form1 : Form
     {
         private Game game;
-        private int timeLeft = 30;
+        private int timeLeft;
 
         public Form1()
         {
             InitializeComponent();
-            gameTimer.Interval = 1000;
+
+            btnStart.Click += btnStart_Click;
+            btnSubmit.Click += btnSubmit_Click;
+            txtAnswer.KeyDown += txtAnswer_KeyDown;
             gameTimer.Tick += gameTimer_Tick;
 
-            btnOption1.Enabled = false;
-            btnOption2.Enabled = false;
-            btnOption3.Enabled = false;
+            SetupForm();
+        }
+
+        private void SetupForm()
+        {
+            lblPlayer.Text = "Player: -";
+            lblLevel.Text = "Level: -";
+            lblQuestion.Text = "Enter your name and press Start to begin.";
+            lblChoices.Text = "";
+            lblScore.Text = "Score: 0";
+            lblLives.Text = "Lives: 3";
+            lblTimer.Text = "Time: 30";
+
+            txtAnswer.Enabled = false;
+            btnSubmit.Enabled = false;
+
+            gameTimer.Interval = 1000;
+            gameTimer.Stop();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            string playerName = txtName.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(playerName))
+            if (string.IsNullOrWhiteSpace(txtName.Text))
             {
-                MessageBox.Show("Please enter your name.");
+                MessageBox.Show("Please enter your name first.");
                 return;
             }
 
-            game = new Game(playerName);
+            game = new Game(txtName.Text.Trim());
+
+            lblPlayer.Text = "Player: " + game.PlayerName;
+
+            txtAnswer.Enabled = true;
+            btnSubmit.Enabled = true;
+
+            DisplayQuestion();
+            StartTimer();
+        }
+
+        private void DisplayQuestion()
+        {
+            if (game == null || game.IsGameOver())
+            {
+                return;
+            }
+
+            Question q = game.CurrentQuestion;
+
+            lblPlayer.Text = "Player: " + game.PlayerName;
+            lblLevel.Text = "Level: " + game.CurrentLevel.LevelName;
+            lblQuestion.Text = q.QuestionText;
+
+            lblChoices.Text =
+                "1. " + q.Options[0] + Environment.NewLine +
+                "2. " + q.Options[1] + Environment.NewLine +
+                "3. " + q.Options[2];
+
+            lblScore.Text = "Score: " + game.Score;
+            lblLives.Text = "Lives: " + game.Lives;
+
+            txtAnswer.Clear();
+            txtAnswer.Focus();
+        }
+
+        private void StartTimer()
+        {
             timeLeft = 30;
-
-            lblPlayer.Text = "Player: " + game.Player.Name;
-            lblScore.Text = "Score: " + game.Player.Score;
-            lblLives.Text = "Lives: " + game.Player.Lives;
             lblTimer.Text = "Time: " + timeLeft;
-            lblResult.Text = "";
-
-            btnOption1.Enabled = true;
-            btnOption2.Enabled = true;
-            btnOption3.Enabled = true;
-
-            ShowQuestion();
             gameTimer.Start();
         }
 
-        private void ShowQuestion()
+        private void btnSubmit_Click(object sender, EventArgs e)
         {
-            if (game == null || !game.HasMoreQuestions())
+            if (game == null)
+            {
+                MessageBox.Show("Please start the game first.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtAnswer.Text))
+            {
+                MessageBox.Show("Please enter your answer first.");
+                txtAnswer.Focus();
+                return;
+            }
+
+            int userAnswer;
+
+            if (!int.TryParse(txtAnswer.Text.Trim(), out userAnswer))
+            {
+                MessageBox.Show("Please enter only 1, 2, or 3.");
+                txtAnswer.Clear();
+                txtAnswer.Focus();
+                return;
+            }
+
+            if (userAnswer < 1 || userAnswer > 3)
+            {
+                MessageBox.Show("Answer must be 1, 2, or 3 only.");
+                txtAnswer.Clear();
+                txtAnswer.Focus();
+                return;
+            }
+
+            gameTimer.Stop();
+
+            bool correct = game.CheckAnswer(userAnswer);
+
+            if (correct)
+            {
+                MessageBox.Show("Correct!");
+            }
+            else
+            {
+                MessageBox.Show("Wrong answer!");
+            }
+
+            lblScore.Text = "Score: " + game.Score;
+            lblLives.Text = "Lives: " + game.Lives;
+
+            game.NextQuestion();
+
+            if (game.IsGameOver())
             {
                 EndGame();
                 return;
             }
 
-            Question q = game.GetCurrentQuestion();
-
-            lblQuestion.Text = q.QuestionText;
-            btnOption1.Text = q.Options[0];
-            btnOption2.Text = q.Options[1];
-            btnOption3.Text = q.Options[2];
-
-            lblScore.Text = "Score: " + game.Player.Score;
-            lblLives.Text = "Lives: " + game.Player.Lives;
-        }
-
-        private void CheckAnswer(int choice)
-        {
-            bool correct = game.SubmitAnswer(choice);
-
-            if (correct)
-                lblResult.Text = "Correct! System stabilized.";
-            else
-                lblResult.Text = "Wrong! System failure detected.";
-
-            lblScore.Text = "Score: " + game.Player.Score;
-            lblLives.Text = "Lives: " + game.Player.Lives;
-
-            if (game.IsGameOver())
-                EndGame();
-            else
-                ShowQuestion();
-        }
-
-        private void btnOption1_Click(object sender, EventArgs e)
-        {
-            CheckAnswer(1);
-        }
-
-        private void btnOption2_Click(object sender, EventArgs e)
-        {
-            CheckAnswer(2);
-        }
-
-        private void btnOption3_Click(object sender, EventArgs e)
-        {
-            CheckAnswer(3);
+            DisplayQuestion();
+            StartTimer();
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
@@ -106,7 +157,27 @@ namespace StarFixGUI
             if (timeLeft <= 0)
             {
                 gameTimer.Stop();
-                EndGame();
+
+                MessageBox.Show("Time's up!");
+
+                if (game != null)
+                {
+                    game.LoseLife();
+
+                    lblScore.Text = "Score: " + game.Score;
+                    lblLives.Text = "Lives: " + game.Lives;
+
+                    game.NextQuestion();
+
+                    if (game.IsGameOver())
+                    {
+                        EndGame();
+                        return;
+                    }
+
+                    DisplayQuestion();
+                    StartTimer();
+                }
             }
         }
 
@@ -114,20 +185,38 @@ namespace StarFixGUI
         {
             gameTimer.Stop();
 
-            btnOption1.Enabled = false;
-            btnOption2.Enabled = false;
-            btnOption3.Enabled = false;
+            txtAnswer.Enabled = false;
+            btnSubmit.Enabled = false;
 
-            if (game != null)
-                MessageBox.Show(game.GetFinalMessage(), "Mission Report");
+            lblPlayer.Text = "Player: " + game.PlayerName;
+            lblScore.Text = "Score: " + game.Score;
+            lblLives.Text = "Lives: " + game.Lives;
+
+            if (game.IsWinner())
+            {
+                lblQuestion.Text = "Congratulations! You completed all levels!";
+                lblChoices.Text = "";
+                lblLevel.Text = "Level: Completed";
+                lblTimer.Text = "Time: 0";
+                MessageBox.Show("Well done! You completed Easy, Medium, and Hard!");
+            }
+            else
+            {
+                lblQuestion.Text = "Game Over!";
+                lblChoices.Text = "";
+                lblLevel.Text = "Level: Ended";
+                lblTimer.Text = "Time: 0";
+                MessageBox.Show("Game Over! You ran out of lives.");
+            }
         }
 
-        private void lblLives_Click(object sender, EventArgs e)
+        private void txtAnswer_KeyDown(object sender, KeyEventArgs e)
         {
-        }
-
-        
-        
-
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtAnswer.Text))
+            {
+                btnSubmit.PerformClick();
+                e.SuppressKeyPress = true;
+            }
         }
     }
+}
