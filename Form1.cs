@@ -11,19 +11,13 @@ namespace StarFixGUI
         public Form1()
         {
             InitializeComponent();
-
-            btnStart.Click += btnStart_Click;
-            btnSubmit.Click += btnSubmit_Click;
-            txtAnswer.KeyDown += txtAnswer_KeyDown;
-            gameTimer.Tick += gameTimer_Tick;
-
             SetupForm();
         }
 
         private void SetupForm()
         {
             lblPlayer.Text = "Player: -";
-            lblLevel.Text = "Level: -";
+            lblLevel.Text = "Level: 1";
             lblQuestion.Text = "Enter your name and press Start to begin.";
             lblChoices.Text = "";
             lblScore.Text = "Score: 0";
@@ -34,6 +28,7 @@ namespace StarFixGUI
             btnSubmit.Enabled = false;
 
             gameTimer.Interval = 1000;
+            gameTimer.Tick += gameTimer_Tick;
             gameTimer.Stop();
         }
 
@@ -47,8 +42,7 @@ namespace StarFixGUI
 
             game = new Game(txtName.Text.Trim());
 
-            lblPlayer.Text = "Player: " + game.PlayerName;
-
+            lblPlayer.Text = "Player: " + game.Player.Name;
             txtAnswer.Enabled = true;
             btnSubmit.Enabled = true;
 
@@ -58,15 +52,19 @@ namespace StarFixGUI
 
         private void DisplayQuestion()
         {
-            if (game == null || game.IsGameOver())
+            if (game == null)
+                return;
+
+            Question q = game.GetCurrentQuestion();
+
+            if (q == null)
             {
+                EndGame();
                 return;
             }
 
-            Question q = game.CurrentQuestion;
-
-            lblPlayer.Text = "Player: " + game.PlayerName;
-            lblLevel.Text = "Level: " + game.CurrentLevel.LevelName;
+            lblPlayer.Text = "Player: " + game.Player.Name;
+            lblLevel.Text = "Question: " + (game.CurrentQuestionIndex + 1);
             lblQuestion.Text = q.QuestionText;
 
             lblChoices.Text =
@@ -74,8 +72,8 @@ namespace StarFixGUI
                 "2. " + q.Options[1] + Environment.NewLine +
                 "3. " + q.Options[2];
 
-            lblScore.Text = "Score: " + game.Score;
-            lblLives.Text = "Lives: " + game.Lives;
+            lblScore.Text = "Score: " + game.Player.Score;
+            lblLives.Text = "Lives: " + game.Player.Lives;
 
             txtAnswer.Clear();
             txtAnswer.Focus();
@@ -123,21 +121,15 @@ namespace StarFixGUI
 
             gameTimer.Stop();
 
-            bool correct = game.CheckAnswer(userAnswer);
+            bool correct = game.SubmitAnswer(userAnswer - 1);
 
             if (correct)
-            {
                 MessageBox.Show("Correct!");
-            }
             else
-            {
                 MessageBox.Show("Wrong answer!");
-            }
 
-            lblScore.Text = "Score: " + game.Score;
-            lblLives.Text = "Lives: " + game.Lives;
-
-            game.NextQuestion();
+            lblScore.Text = "Score: " + game.Player.Score;
+            lblLives.Text = "Lives: " + game.Player.Lives;
 
             if (game.IsGameOver())
             {
@@ -157,17 +149,19 @@ namespace StarFixGUI
             if (timeLeft <= 0)
             {
                 gameTimer.Stop();
-
                 MessageBox.Show("Time's up!");
 
                 if (game != null)
                 {
-                    game.LoseLife();
+                    game.Player.LoseLife();
 
-                    lblScore.Text = "Score: " + game.Score;
-                    lblLives.Text = "Lives: " + game.Lives;
+                    lblScore.Text = "Score: " + game.Player.Score;
+                    lblLives.Text = "Lives: " + game.Player.Lives;
 
-                    game.NextQuestion();
+                    if (game.HasMoreQuestions())
+                    {
+                        game.SubmitAnswer(-1);
+                    }
 
                     if (game.IsGameOver())
                     {
@@ -188,25 +182,23 @@ namespace StarFixGUI
             txtAnswer.Enabled = false;
             btnSubmit.Enabled = false;
 
-            lblPlayer.Text = "Player: " + game.PlayerName;
-            lblScore.Text = "Score: " + game.Score;
-            lblLives.Text = "Lives: " + game.Lives;
+            lblPlayer.Text = "Player: " + game.Player.Name;
+            lblScore.Text = "Score: " + game.Player.Score;
+            lblLives.Text = "Lives: " + game.Player.Lives;
+            lblChoices.Text = "";
+            lblTimer.Text = "Time: 0";
 
-            if (game.IsWinner())
+            if (game.IsWinner)
             {
-                lblQuestion.Text = "Congratulations! You completed all levels!";
-                lblChoices.Text = "";
-                lblLevel.Text = "Level: Completed";
-                lblTimer.Text = "Time: 0";
-                MessageBox.Show("Well done! You completed Easy, Medium, and Hard!");
+                lblQuestion.Text = "Congratulations! Mission successful!";
+                lblLevel.Text = "Completed";
+                MessageBox.Show("Well done! You answered all questions.");
             }
             else
             {
                 lblQuestion.Text = "Game Over!";
-                lblChoices.Text = "";
-                lblLevel.Text = "Level: Ended";
-                lblTimer.Text = "Time: 0";
-                MessageBox.Show("Game Over! You ran out of lives.");
+                lblLevel.Text = "Ended";
+                MessageBox.Show("Game Over! " + game.GetFinalMessage());
             }
         }
 

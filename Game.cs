@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using StarFixGUI;
 
 namespace StarFixGUI
 {
@@ -24,6 +23,11 @@ namespace StarFixGUI
         public int CurrentQuestionIndex
         {
             get { return currentQuestionIndex; }
+        }
+
+        public bool IsWinner
+        {
+            get { return player.IsAlive() && currentQuestionIndex >= questions.Count; }
         }
 
         public Game(string playerName)

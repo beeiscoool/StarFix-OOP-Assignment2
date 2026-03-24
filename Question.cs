@@ -30,7 +30,7 @@ namespace StarFixGUI
             this.correctAnswer = correctAnswer;
         }
 
-        public bool IsCorrect(int userAnswer)
+        public bool CheckAnswer(int userAnswer)
         {
             return userAnswer == correctAnswer;
         }
